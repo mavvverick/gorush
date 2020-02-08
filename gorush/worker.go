@@ -22,7 +22,7 @@ func SendNotification(req PushNotification) {
 	}
 
 	select {
-	case <-req.ctx.Done():
+	//case <-req.ctx.Done():
 	default:
 		switch req.Platform {
 		case PlatFormIos:

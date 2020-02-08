@@ -9,6 +9,8 @@ import (
 	proto "github.com/golang/protobuf/proto"
 	_struct "github.com/golang/protobuf/ptypes/struct"
 	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 	math "math"
 )
 
@@ -21,7 +23,7 @@ var _ = math.Inf
 // is compatible with the proto package it is being compiled against.
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
-const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
+const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
 type HealthCheckResponse_ServingStatus int32
 
@@ -520,6 +522,14 @@ type GorushServer interface {
 	Send(context.Context, *NotificationRequest) (*NotificationReply, error)
 }
 
+// UnimplementedGorushServer can be embedded to have forward compatible implementations.
+type UnimplementedGorushServer struct {
+}
+
+func (*UnimplementedGorushServer) Send(ctx context.Context, req *NotificationRequest) (*NotificationReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Send not implemented")
+}
+
 func RegisterGorushServer(s *grpc.Server, srv GorushServer) {
 	s.RegisterService(&_Gorush_serviceDesc, srv)
 }
@@ -582,6 +592,14 @@ func (c *healthClient) Check(ctx context.Context, in *HealthCheckRequest, opts .
 // HealthServer is the server API for Health service.
 type HealthServer interface {
 	Check(context.Context, *HealthCheckRequest) (*HealthCheckResponse, error)
+}
+
+// UnimplementedHealthServer can be embedded to have forward compatible implementations.
+type UnimplementedHealthServer struct {
+}
+
+func (*UnimplementedHealthServer) Check(ctx context.Context, req *HealthCheckRequest) (*HealthCheckResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Check not implemented")
 }
 
 func RegisterHealthServer(s *grpc.Server, srv HealthServer) {
